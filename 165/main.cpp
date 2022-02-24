@@ -6,7 +6,7 @@
 
 using namespace std;
 
-constexpr int MAXN = 10;
+constexpr int MAXN = 15;
 
 int h, k;
 int coin[2][MAXN];
@@ -20,14 +20,13 @@ void dfs(int h, int kind = 1, int st = 1, int ed = 1)
 		int maxcov = v * h;
 		coin[1][kind] = v;
 		memcpy(&dp[kind], &dp[kind - 1], sizeof(int) * 10000);
-		dp[kind][v] = 1;
 		for (int j = v; j <= v * h; ++j)
 		{
 			dp[kind][j] = min(dp[kind][j], dp[kind][j - v] + 1);
-			if (dp[kind][j] >= h + 1)
+			if (dp[kind][j] >= h + 1 && maxcov == v * h)
 			{
 				maxcov = j - 1;
-				break;
+				//break; // maybe next will be less, and that might effect the next level result.
 			}
 		}
 		
@@ -41,10 +40,26 @@ void dfs(int h, int kind = 1, int st = 1, int ed = 1)
 		putchar('\n');
 		*/
 
-		if (kind == k)
+		if (kind >= k)
 		{
 			if (_maxcov < maxcov)
 			{
+				/*
+				printf("now using coin: ");
+				for (int i = 1; i <= kind; ++i) printf("%d ", coin[1][i]);
+				putchar('\n');
+				printf("maxcov = %d\n", maxcov);
+				for (int j = 1; j <= kind; ++j)
+				{
+					for (int i = 0; i <= v * h; ++i)
+					{
+						if (dp[j][i] == UNDEFINED) printf("x ");
+						else printf("%d ", dp[j][i]);
+					}
+					putchar('\n');
+				}
+				*/
+
 				memcpy(&coin[0], &coin[1], sizeof(int) * MAXN);
 				_maxcov = maxcov;
 			}
@@ -64,6 +79,7 @@ int main()
 	{
 		_maxcov = -1;
 		dfs(h);
+		//if (h == 0 || k == 0) _maxcov = 0;
 		for (int i = 1; i <= k; ++i)
 		{
 			printf("%3d", coin[0][i]);
