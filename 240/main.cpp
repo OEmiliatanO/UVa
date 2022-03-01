@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <queue>
 #include <vector>
-#pragma warning(disable:4996)
+//#pragma warning(disable:4996)
 #define INF 0x7f7f7f7f
 
 using namespace std;
