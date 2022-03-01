@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <queue>
 #include <vector>
+#pragma warning(disable:4996)
 #define INF 0x7f7f7f7f
 
 using namespace std;
@@ -13,12 +14,11 @@ constexpr int MAXCHARA = 26;
 typedef struct node
 {
 	node* sons[MAXR + 1];
-	char charas[MAXCHARA + 1];
-	int soncnt, freq, chcnt, order;
+	int soncnt, freq, order;
 
-	node() { charas[0] = '.'; soncnt = freq = 0, chcnt = 1; };
-	node(int feq, char ch) { charas[0] = ch, freq = feq, chcnt = 1, soncnt = 0; };
-	node(int feq, char ch, int ord) { charas[0] = ch, freq = feq, chcnt = 1, soncnt = 0, order = ord; };
+	node() { soncnt = freq = order = 0; };
+	node(int feq) { freq = feq, soncnt = 0; };
+	node(int feq, int ord) { freq = feq, soncnt = 0, order = ord; };
 }node;
 
 typedef struct cmp
@@ -30,16 +30,18 @@ typedef struct cmp
 }cmp;
 
 int R, N, freq[MAXCHARA + 1];
+string huffcode[MAXCHARA + 1];
+int ans, tot;
 
 void travel(node* now, string s = "")
 {
 	if (now == nullptr) return;
 	if (now->soncnt == 0)
 	{
-		if (now->charas[0] != '.')
+		if (now->order != INF)
 		{
-			huff[now->charas[0] - 'A'] = s;
-			
+			huffcode[now->order] = s;
+			ans += s.size() * freq[now->order];
 		}
 		return;
 	}
@@ -63,32 +65,35 @@ void del(node* now)
 
 int main()
 {
-    while(~scanf("%d", &R) && R)
-    {
+	int t = 1;
+	while (~scanf("%d", &R) && R)
+	{
+		ans = tot = 0;
 		node* root = nullptr;
 		priority_queue<node*, vector<node*>, cmp> pq;
 
 		scanf("%d", &N);
 		for (int i = 0; i < N; ++i)
 		{
-	    	scanf("%d", freq + i);
-	    	pq.emplace(new node(freq[i], 'A' + i, i));
+			scanf("%d", freq + i);
+			tot += freq[i];
+			pq.emplace(new node(freq[i], i));
 		}
-		
+
 		{
 			unsigned long k = 0;
-			while(k * (R - 1) + R < (unsigned long)N) ++k;
+			while (k * (R - 1) + R < (unsigned long)N) ++k;
 			//printf("grow to %lu\n", k * (R - 1) + R);
-			while(pq.size() < k * (R - 1) + R)
+			while (pq.size() < k * (R - 1) + R)
 			{
-				pq.emplace(new node(0, '.', INF));
+				pq.emplace(new node(0, INF));
 			}
 		}
-		
-		while(pq.size() >= (unsigned long)R)
+
+		while (pq.size() >= (unsigned long)R)
 		{
 			node* nexNd;
-			node* newnode = new node();
+			node* newnode = new node(0, INF);
 			for (int i = 0; i < R; ++i)
 			{
 				nexNd = pq.top(); pq.pop();
@@ -97,14 +102,20 @@ int main()
 				newnode->sons[newnode->soncnt++] = nexNd;
 			}
 			pq.emplace(newnode);
-    	}
+		}
 		root = pq.top(); pq.pop();
 
 		travel(root);
 
-		
-	
+		printf("Set %d; average length %.2f\n", t++, (double)ans / tot);
+		for (int i = 0; i < N; ++i)
+		{
+			cout << "    " << (char)('A' + i) << ": " << huffcode[i] << '\n';
+		}
+
 		del(root);
+
+		putchar('\n');
 	}
 	return 0;
 }
