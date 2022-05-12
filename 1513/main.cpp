@@ -1,13 +1,15 @@
 #include <iostream>
 #include <cstring>
+#include <map>
 
 #define low(x) (x&(-x))
 
 using namespace std;
 
-constexpr int MAXN = 1e5;
+constexpr int MAXN = 2e5 + 4;
 
-int64_t BIT[MAXN + 2];
+int64_t BIT[MAXN];
+map<int, int> M;
 
 void add(int pos, int64_t val)
 {
@@ -30,12 +32,19 @@ int main()
 	scanf("%d", &T);
 	while(T--)
 	{
+		M.clear();
 		memset(BIT, 0, sizeof(BIT));
 
-		int n, m;
+		int n, m, base;
 		scanf("%d %d", &n, &m);
+		base = m;
 		for (int i = 1; i <= n; ++i)
-			add(i, 1LL);
+		{
+			add(base + i, 1LL);
+			if (require(base + i) != i)
+				cout << "i = " << i << '\n';
+			M[i] = base + i;
+		}
 
 		while(m--)
 		{
@@ -43,13 +52,13 @@ int main()
 			int64_t res;
 			scanf("%d", &x);
 			//cout << "x=" << x << '\n';
-			res = require(x);
+			res = require(M[x]);
 			//cout << "req(x) = " << require(x) << '\n';
 			printf("%ld%c", res - 1, " \n"[m == 0]);
-			add(1, 1LL);
-			add(res, -1);
-			add(x, -res + 1);
-			add(x + 1, res - 1);
+			add(base, 1LL);
+			add(M[x], -1);
+			M[x] = base;
+			--base;
 		}
 	}
 	return 0;
