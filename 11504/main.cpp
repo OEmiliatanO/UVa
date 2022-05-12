@@ -25,7 +25,7 @@ void dfs(int now, int s)
 	for (auto nex : G[now])
 		if (scc[nex] == -1)
 			dfs(nex, s);
-		else
+		else if (scc[nex] != s)
 			++in[scc[nex]];
 }
 
@@ -73,9 +73,14 @@ int main()
 		}
 
 		int NScc = findscc(n);
+		//cout << NScc << '\n';
 		int ans = 0;
 		for (int i = 1; i <= NScc; ++i)
+		{
 			(!in[i]) && (++ans);
+			//cout << in[i] << ' ';
+		}
+		//cout << '\n';
 
 		printf("%d\n", ans);
 	}
