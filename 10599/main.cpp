@@ -47,7 +47,6 @@ int main()
 					{
 						upperm = min(upperm, j);
 						cnts[i][j] = max(cnts[i][j], cnt[now.first][now.second] + 1);
-						ways[i][j] = 
 						break;
 					}
 				}
