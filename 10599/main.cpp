@@ -24,6 +24,7 @@ int main()
 		memset(ways, 0, sizeof(ways));
 		memset(vis, 0, sizeof(vis));
 		queue<pii> qu;
+		
 		int fix = -2, x, y;
 		while(scanf("%d %d", &x, &y) && !(x == 0 && y == 0))
 		{
