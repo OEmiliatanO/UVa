@@ -100,9 +100,9 @@ int main()
 			if (eq(0))
 				printf("reflected vertically and rotated 90 degrees.\n");
 			else if (eq(1))
-				printf("reflected vertically rotated 180 degrees.\n");
+				printf("reflected vertically and rotated 180 degrees.\n");
 			else if (eq(2))
-				printf("reflected vertically rotated 270 degrees.\n");
+				printf("reflected vertically and rotated 270 degrees.\n");
 			else
 				printf("improperly transformed.\n");
 		}
