@@ -17,7 +17,8 @@ int main()
 		int n, m;
 		cin >> n >> m; cin.ignore();
 		for (int i = 0; i < m; ++i) getline(cin, arr[i]);
-		sort(arr, arr + m, [](const string& lhs, const string& rhs) {
+
+		stable_sort(arr, arr + m, [](const string& lhs, const string& rhs) {
 				int l = 0, r = 0;
 				for (auto it = lhs.begin(); it != lhs.end(); ++it)
 					for (auto comp = it + 1; comp != lhs.end(); ++comp)
@@ -27,6 +28,7 @@ int main()
 						r += (*it > *comp);
 				return l < r;
 				});
+		
 		for (int i = 0; i < m; ++i) cout << arr[i] << '\n';
 		if (M) cout << '\n';
 	}
