@@ -28,7 +28,7 @@ int main()
 				return l < r;
 				});
 		for (int i = 0; i < m; ++i) cout << arr[i] << '\n';
-		cout << '\n';
+		if (M) cout << '\n';
 	}
 
 	return 0;
