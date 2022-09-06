@@ -1,5 +1,5 @@
 CC:=g++
-Flag=-Wall
+Flag=-Wall -Wextra
 
 init: ../template/main.cpp
 	cp ../template/main.cpp main.cpp
