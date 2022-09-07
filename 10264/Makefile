@@ -1,11 +1,6 @@
 CC:=g++
 Flag:=-Wall -Wextra
 
-initDir:
-	mkdir $(DIR)
-	cp ./template/Makefile ./$(DIR)/Makefile
-	cp ./template/main.cpp ./$(DIR)/main.cpp
-
 init: ../template/main.cpp
 	cp ../template/main.cpp main.cpp
 
