@@ -19,14 +19,14 @@ void build(int l = 1, int r = n, int now = 1)
 #ifdef DEBUGing
 	printf("in build(l = %d, r = %d, now = %d)\n", l, r, now);
 #endif
-	lazy[now] = 0;
 	int mid = (r + l) >> 1;
 	build(l, mid, now << 1);
 	build(mid + 1, r, now << 1 | 1);
 	seg[now] = seg[now << 1] + seg[now << 1 | 1];
+	lazy[now] = 0;
 }
 
-char revertLZ(int now)
+char invertLZ(int now)
 {
 	return (lazy[now] == 'I' ? 0 : (lazy[now] == '0' ? '1' : (lazy[now] == '1' ? '0' : 'I')));
 }
@@ -44,9 +44,9 @@ void push(int l, int r, int now)
 	int mid = (r + l) >> 1;
 	if (ch == 'I')
 	{
-		lazy[now << 1] = revertLZ(now << 1);
+		lazy[now << 1] = invertLZ(now << 1);
 		seg[now << 1] = mid - l + 1 - seg[now << 1];
-		lazy[now << 1 | 1] = revertLZ(now << 1 | 1);
+		lazy[now << 1 | 1] = invertLZ(now << 1 | 1);
 		seg[now << 1 | 1] = r - mid - seg[now << 1 | 1];
 	}
 	else if (ch == '0' or ch == '1')
@@ -175,21 +175,13 @@ int main()
 			scanf("%d %d%*c", &a, &b);
 			++a, ++b;
 			if (ch == 'F')
-			{
 				modify(a, b, '1');
-			}
 			else if (ch == 'E')
-			{
 				modify(a, b, '0');
-			}
 			else if (ch == 'I')
-			{
 				modify(a, b, 'I');
-			}
 			else//if (ch == 'S')
-			{
 				printf("Q%d: %d\n", qes++, require(a, b));
-			}
 		}
 	}
 	return 0;
