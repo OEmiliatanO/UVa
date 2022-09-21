@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <cstring>
-#include <queue>
 #include <map>
 #define lowbit(x) ((-(x)) & (x))
 
@@ -16,7 +15,7 @@ int BIT[MAXN + 1]{};
 void add(int pos, int val)
 {
 	if (pos <= 0) return;
-	for (; pos < MAXSIZE; pos += lowbit(pos))
+	for (; pos < MAXN; pos += lowbit(pos))
 		BIT[pos] += val;
 }
 
@@ -33,7 +32,6 @@ int T = 1;
 int ask[MAXN + 10][2]{};
 int cache[MAXC + 10];
 int miss[MAXC + 10]{};
-queue<int> stat;
 char s[10];
 map<int, int> table;
 
@@ -72,51 +70,35 @@ int main()
 			table[req] = T++;
 		}
 		else if (s[0] == 'S')
-			stat.emplace(T);
-	}
-	
-	while (stat.size() && stat.front() - 1 == 0)
-	{
-		for (int i = 0; i < n - 1; ++i)
-			printf("%d ", miss[i]);
-		printf("%d\n", miss[n - 1]);
-		stat.pop();
+			ask[T++][0] = -1;
 	}
 
 	for (int t = 1; t < T; ++t)
 	{
-		add(t, 1);
-		if (ask[t][1] == -1)
-		{
-			for (int i = 0; i < n; ++i)
-				++miss[i];
-		}
-		else if (ask[t][1] > 0)
-		{
-			int dis = query(t) - query(ask[t][1]);
-			for (int i = 0; i < n; ++i)
-				miss[i] += (cache[i] < dis);
-			add(ask[t][1], -1);
-		}
-
-		if (stat.size() && stat.front() - 1 == t)
+		if (ask[t][0] == -1)
 		{
 			for (int i = 0; i < n - 1; ++i)
 				printf("%d ", miss[i]);
 			printf("%d\n", miss[n - 1]);
 			memset(miss, 0, sizeof(miss));
-			stat.pop();
+		}
+		else
+		{
+			add(t, 1);
+			if (ask[t][1] == -1)
+			{
+				for (int i = 0; i < n; ++i)
+					++miss[i];
+			}
+			else if (ask[t][1] > 0)
+			{
+				int dis = query(t) - query(ask[t][1]);
+				for (int i = 0; i < n; ++i)
+					miss[i] += (cache[i] < dis);
+				add(ask[t][1], -1);
+			}
 		}
 	}
 
-	while (stat.size())
-	{			
-		for (int i = 0; i < n - 1; ++i)
-			printf("%d ", miss[i]);
-		printf("%d\n", miss[n - 1]);
-		memset(miss, 0, sizeof(miss));
-		stat.pop();
-	}
-	
 	return 0;
 }
